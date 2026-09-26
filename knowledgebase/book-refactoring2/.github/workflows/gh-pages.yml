@@ -1,0 +1,37 @@
+name: 更新在线书籍
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Setup Node🐜
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'v10'
+
+      - name: Install and Build 🔧
+        run: |
+          sudo apt-get update
+          sudo apt-get install libegl1 libopengl0
+          sudo apt-get install fonts-wqy-zenhei
+          sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
+          yarn
+          npm run build
+          cp CNAME ./_book/ && npm run ebook && mv ebook ./_book/
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages
+          folder: _book
+  
