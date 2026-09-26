@@ -1,3 +1,10 @@
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg" />
+    <img src="assets/logo.svg" alt="refactoring-code logo" width="160" />
+  </picture>
+</div>
+
 # refactoring-code
 
 [English](README.md) | [中文](README.zh.md)
@@ -10,6 +17,9 @@
 
 ```
 refactoring-code/
+├── assets/                     # 仓库资源（logo，浅色 + 深色两个变体）
+│   ├── logo.svg
+│   └── logo-dark.svg
 ├── skill/                      # 技能本体（自足，可独立安装）
 │   ├── SKILL.md                # 入口：六步工作流 + 原则速查 + 索引
 │   └── references/             # 按需加载（渐进式披露）

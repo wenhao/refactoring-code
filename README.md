@@ -1,3 +1,10 @@
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg" />
+    <img src="assets/logo.svg" alt="refactoring-code logo" width="160" />
+  </picture>
+</div>
+
 # refactoring-code
 
 [English](README.md) | [中文](README.zh.md)
@@ -12,6 +19,9 @@ The skill encodes the book's methodology — small safe steps, test-first safety
 
 ```
 refactoring-code/
+├── assets/                     # Repo assets (logo, light + dark variants)
+│   ├── logo.svg
+│   └── logo-dark.svg
 ├── skill/                      # The skill itself (self-contained, installable)
 │   ├── SKILL.md                # Entry point: 6-step workflow + principle cheat-sheet + index
 │   └── references/             # Loaded on demand (progressive disclosure)

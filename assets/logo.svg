@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>refactoring-code</title>
+  <desc>Curly braces framing a rising green arrow: improving the design of existing code, one small green step at a time. Transparent background; tuned for light themes.</desc>
+
+  <!-- left brace { -->
+  <path d="M196 118 Q140 118 140 178 L140 226 Q140 256 110 256 Q140 256 140 286 L140 334 Q140 394 196 394"
+        fill="none" stroke="#312E81" stroke-width="30"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- right brace } -->
+  <path d="M316 118 Q372 118 372 178 L372 226 Q372 256 402 256 Q372 256 372 286 L372 334 Q372 394 316 394"
+        fill="none" stroke="#312E81" stroke-width="30"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- rising arrow: small steps, always green -->
+  <path d="M186 330 Q250 316 322 194"
+        fill="none" stroke="#059669" stroke-width="30" stroke-linecap="round"/>
+  <path d="M322 194 L322 262 M322 194 L254 194"
+        fill="none" stroke="#059669" stroke-width="30"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
