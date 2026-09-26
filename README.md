@@ -34,14 +34,15 @@ That's **61 cataloged refactorings** and **24 bad smells**, each entry keeping t
 
 ## How the skill works
 
-`SKILL.md` defines a six-step workflow:
+`SKILL.md` defines a seven-step workflow:
 
 1. **Scope the scan — incremental by default** — when no target is specified, scan only uncommitted and committed-but-unpushed changes (`git diff @{u}` plus untracked files), report the scope to the user, and proactively remind them a full-repo scan is available; an explicitly specified target or an explicit full-repo request always overrides the default.
 2. **Establish intent & baseline** — two hats (never mix refactoring with new features); build a test safety net first (characterization tests for legacy code).
-3. **Diagnose bad smells** — match the code against `smells.md`, attack the smell that hurts comprehension the most, one at a time.
-4. **Consult the catalog** — load the matching `catalog-*.md` and follow its small-step mechanics; the skill is self-contained and requires no external files.
-5. **Small-step loop** — apply one tiny change → compile → test → commit. Roll back to the last green state rather than debugging forward.
-6. **Wrap up** — update callers/docs, report which smells were fixed, which techniques were applied, and why behavior is unchanged.
+3. **Diagnose bad smells** — match the code against `smells.md`; read-only at this stage.
+4. **Propose a plan and wait for the user's decision** — present findings (each smell, its location, severity), suggested techniques (ranked by impact), and a risk assessment (local-only vs. touching public interfaces), then ask the user to confirm scope, depth, and any "do not touch" constraints. **No line of code changes without user approval.**
+5. **Execute the approved plan** — load the matching `catalog-*.md` and follow its small-step mechanics; the skill is self-contained and requires no external files.
+6. **Small-step loop** — apply one tiny change → compile → test → commit. Roll back to the last green state rather than debugging forward. New smells discovered mid-flight are recorded for the next decision round, not fixed on the fly.
+7. **Wrap up** — update callers/docs, report completion of each approved item (including those the user declined) and why behavior is unchanged.
 
 ## Installation
 
