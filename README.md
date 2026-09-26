@@ -7,56 +7,34 @@
 
 # refactoring-code
 
+Refactor code with small, safe, test-backed steps. A skill distilled from *Refactoring: Improving the Design of Existing Code (2nd Edition)*, chapter by chapter.
+
 [English](README.md) | [中文](README.zh.md)
 
-A code-refactoring **skill** for AI coding agents, distilled chapter-by-chapter from the complete Chinese translation of *Refactoring: Improving the Design of Existing Code (2nd Edition)* by Martin Fowler.
+## Overview
 
-The skill encodes the book's methodology — small safe steps, test-first safety nets, bad-smell diagnosis, and the full catalog of refactorings — as on-demand instructions an agent loads when you ask it to refactor code. It is **self-contained**: the `skill/` directory is all an installed agent needs.
+- **Bad-smell diagnosis**: 24 named smells (long function, duplicated code, feature envy…) mapped to first-choice refactorings, so the agent knows *what* to look for and *which* technique to reach for.
+- **61 cataloged refactorings**: every technique from the book's catalog — Extract Function, Encapsulate Variable, Replace Conditional with Polymorphism, Replace Subclass with Delegate… — as small-step mechanics the agent follows one change at a time.
+- **Human in the loop**: the agent never edits a line before presenting a plan (findings → suggested techniques → risk assessment) and getting your approval on scope and depth.
+- **Incremental by default**: scans only your uncommitted and unpushed changes, and reminds you a full-repo scan is available.
 
-> **Note:** the skill's instructions are written in Chinese, since they were distilled from the Chinese translation of the book.
+> The skill's instructions are written in Chinese, distilled from the book's Chinese translation.
 
-## Repository structure
+## Features
 
-```
-refactoring-code/
-├── assets/                     # Repo assets (logo, light + dark variants)
-│   ├── logo.svg
-│   └── logo-dark.svg
-├── skill/                      # The skill itself (self-contained, installable)
-│   ├── SKILL.md                # Entry point: 6-step workflow + principle cheat-sheet + index
-│   └── references/             # Loaded on demand (progressive disclosure)
-│       ├── principles.md       # Mindset & principles (ch1, 2)
-│       ├── testing.md          # Test safety net (ch4)
-│       ├── smells.md           # 24 bad smells → first-choice refactorings (ch3)
-│       ├── catalog-basic.md            # First set of refactorings (ch6, 11 techniques)
-│       ├── catalog-encapsulation.md    # Encapsulation (ch7, 9)
-│       ├── catalog-moving-features.md  # Moving features (ch8, 9)
-│       ├── catalog-data.md             # Organizing data (ch9, 5)
-│       ├── catalog-conditionals.md     # Simplifying conditionals (ch10, 6)
-│       ├── catalog-api.md              # Refactoring APIs (ch11, 10)
-│       └── catalog-inheritance.md      # Dealing with inheritance (ch12, 11)
-└── knowledgebase/
-    └── book-refactoring2/      # Source book (Chinese translation) — development-time
-                                # reference only; the installed skill does not depend on it
-```
+- **Evidence-based catalog** — distilled by reading all 12 chapters; every entry keeps the book's five-part shape (name → sketch → motivation → mechanics) with page-number citations for human traceability.
+- **Self-contained install** — the `skill/` directory is everything an agent needs; no paths into this repo, no external dependencies.
+- **Universal SKILL.md format** — works with ZCode, Claude Code, and Codex (and any agent that discovers skills from a `SKILL.md`).
+- **Safety-net first** — characterization tests for legacy code before touching it; green-bar discipline throughout (test failed → roll back, don't debug forward).
+- **Two hats enforced** — refactoring commits never mix in new features.
+- **Decision gate** — read-only diagnosis, then a plan you approve before any edit; mid-flight discoveries are recorded for the next decision round, never fixed on the fly.
+- **Progressive disclosure** — a lean `SKILL.md` workflow; the heavy catalogs load only when a matching smell is diagnosed.
 
-That's **61 cataloged refactorings** and **24 bad smells**, each entry keeping the book's five-part shape (name → sketch → motivation → mechanics → example reference). Chapter and page numbers are citations for human traceability, not file paths.
+## Quick Start
 
-## How the skill works
+### 1. Install
 
-`SKILL.md` defines a seven-step workflow:
-
-1. **Scope the scan — incremental by default** — when no target is specified, scan only uncommitted and committed-but-unpushed changes (`git diff @{u}` plus untracked files), report the scope to the user, and proactively remind them a full-repo scan is available; an explicitly specified target or an explicit full-repo request always overrides the default.
-2. **Establish intent & baseline** — two hats (never mix refactoring with new features); build a test safety net first (characterization tests for legacy code).
-3. **Diagnose bad smells** — match the code against `smells.md`; read-only at this stage.
-4. **Propose a plan and wait for the user's decision** — present findings (each smell, its location, severity), suggested techniques (ranked by impact), and a risk assessment (local-only vs. touching public interfaces), then ask the user to confirm scope, depth, and any "do not touch" constraints. **No line of code changes without user approval.**
-5. **Execute the approved plan** — load the matching `catalog-*.md` and follow its small-step mechanics; the skill is self-contained and requires no external files.
-6. **Small-step loop** — apply one tiny change → compile → test → commit. Roll back to the last green state rather than debugging forward. New smells discovered mid-flight are recorded for the next decision round, not fixed on the fly.
-7. **Wrap up** — update callers/docs, report completion of each approved item (including those the user declined) and why behavior is unchanged.
-
-## Installation
-
-The skill uses the common `SKILL.md` format (a directory with `SKILL.md` in YAML frontmatter carrying `name` and `description`), so it works with any agent that supports skills. Symlink (or copy) the `skill/` directory as `refactoring-code` into your agent's skills directory:
+Symlink (or copy) `skill/` as `refactoring-code` into your agent's skills directory:
 
 | Agent | Project-level | Global |
 |-------|---------------|--------|
@@ -65,25 +43,74 @@ The skill uses the common `SKILL.md` format (a directory with `SKILL.md` in YAML
 | Codex | `<project>/.codex/skills/` | `~/.codex/skills/` |
 
 ```bash
-# Example: enable globally for Claude Code
+# Global install for Claude Code
 ln -s /path/to/refactoring-code/skill ~/.claude/skills/refactoring-code
 
-# Example: enable for the current project in Codex
+# Project-level install for Codex
 ln -s /path/to/refactoring-code/skill .codex/skills/refactoring-code
 ```
 
 Replace `/path/to/refactoring-code` with your local clone path. For global installs, copy instead of symlink if your clone may move.
 
-## Usage
+### 2. Trigger it
 
-Once installed, the skill triggers automatically when you ask things like "重构这段代码", "improve this code's design", "clean up this tech debt" — even if you never say the word "refactor". Agents that support explicit invocation can also call it directly (e.g. `/refactoring-code` in ZCode).
+Just ask, in your own words — the skill triggers even without the word "refactor":
+
+```text
+帮我重构一下这次改动的代码
+Improve the design of the code I'm working on.
+这段代码太乱了，帮我清理一下技术债
+```
+
+Or invoke it explicitly where the agent supports it (e.g. `/refactoring-code` in ZCode).
+
+### 3. Review the plan, then approve
+
+The agent will scan your incremental changes, report the bad smells it found, and propose techniques with a risk assessment. You decide the scope (first item only / low-risk items / everything), the depth (local tidy-ups vs. structural changes), and any do-not-touch constraints. Only then does it edit — one small change, one test run, one commit at a time.
+
+## How it works
+
+```text
+1. Scope        git diff @{u} + untracked files → report scope → remind about full-repo scan
+2. Baseline     intent (two hats) + test safety net (characterization tests if none)
+3. Diagnose     match code against 24 bad smells — read-only
+4. DECIDE       propose plan (findings / techniques / risks) → wait for user approval
+5. Execute      approved items only, following catalog small-step mechanics
+6. Loop         tiny change → compile → test → commit; roll back on red
+7. Wrap up      report per approved item, incl. declined ones and new findings
+```
+
+## Project structure
+
+```text
+refactoring-code/
+├── skill/                      # The skill (self-contained; this is all you install)
+│   ├── SKILL.md                # Entry point: 7-step workflow + principle cheat-sheet + catalog index
+│   └── references/
+│       ├── principles.md       # Mindset & principles (ch1-2): two hats, when to refactor, YAGNI
+│       ├── testing.md          # Test safety net (ch4): characterization tests, red/green discipline
+│       ├── smells.md           # 24 bad smells → first-choice refactorings (ch3)
+│       ├── catalog-basic.md            # Extract/inline, rename, split phase… (ch6)
+│       ├── catalog-encapsulation.md    # Encapsulate record/collection, extract class… (ch7)
+│       ├── catalog-moving-features.md  # Move function/field, split loop, remove dead code… (ch8)
+│       ├── catalog-data.md             # Split variable, derived variable → query… (ch9)
+│       ├── catalog-conditionals.md     # Guard clauses, polymorphism, special case… (ch10)
+│       ├── catalog-api.md              # Separate query/modifier, remove flag argument… (ch11)
+│       └── catalog-inheritance.md      # Pull up/push down, replace type code, delegate… (ch12)
+├── knowledgebase/
+│   └── book-refactoring2/      # Source book (Chinese translation) — development-time
+│                               # verification only; the installed skill does not depend on it
+├── assets/                     # Logo (light/dark theme variants)
+├── README.md                   # This file
+└── README.zh.md                # Chinese version
+```
 
 ## Maintenance conventions
 
 The skill was built by reading all 12 chapters and iterating after each one. When improving it:
 
-- Keep each entry's "motivation + mechanics" structure and its page-number anchor into the book.
-- If a distilled note conflicts with the book, **the book wins** — the knowledgebase in this repo has the full text for verification.
+- Keep each entry's "motivation + mechanics" structure and its page-number anchor.
+- If a distilled note conflicts with the book, **the book wins** — `knowledgebase/` has the full text for verification.
 - **Portability rule**: never reference repo files (such as `knowledgebase/`) from inside the skill — installed users only take the `skill/` directory. Chapter and page numbers remain as citations only.
 
 ## Copyright
