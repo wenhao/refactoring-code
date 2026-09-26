@@ -1,6 +1,6 @@
 # 手法目录：重构 API
 
-> 提炼自《重构（第二版）》第 11 章（`knowledgebase/book-refactoring2/docs/ch11.md`）。
+> 提炼自《重构（第二版）》第 11 章。括号内数字为原书页码，仅供人工溯源。
 > 模块和函数是软件的骨肉，API 是连接它们的关节。
 
 ## 11.1 将查询函数和修改函数分离 Separate Query from Modifier（306）
