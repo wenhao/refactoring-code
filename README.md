@@ -57,9 +57,9 @@ Replace `/path/to/refactoring-code` with your local clone path. For global insta
 Just ask, in your own words — the skill triggers even without the word "refactor":
 
 ```text
-帮我重构一下这次改动的代码
+Refactor the code from my current changes.
 Improve the design of the code I'm working on.
-这段代码太乱了，帮我清理一下技术债
+This code is a mess — help me clean up the tech debt.
 ```
 
 Or invoke it explicitly where the agent supports it (e.g. `/refactoring-code` in ZCode).
