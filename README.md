@@ -33,13 +33,14 @@ That's **61 cataloged refactorings** and **24 bad smells**, each entry keeping t
 
 ## How the skill works
 
-`SKILL.md` defines a five-step workflow:
+`SKILL.md` defines a six-step workflow:
 
-1. **Establish intent & baseline** — two hats (never mix refactoring with new features); build a test safety net first (characterization tests for legacy code).
-2. **Diagnose bad smells** — match the code against `smells.md`, attack the smell that hurts comprehension the most, one at a time.
-3. **Consult the catalog** — load the matching `catalog-*.md` for mechanics; first-time use of a technique sends you to the original chapter for the full example.
-4. **Small-step loop** — apply one tiny change → compile → test → commit. Roll back to the last green state rather than debugging forward.
-5. **Wrap up** — update callers/docs, report which smells were fixed, which techniques were applied, and why behavior is unchanged.
+1. **Scope the scan — incremental by default** — when no target is specified, scan only uncommitted and committed-but-unpushed changes (`git diff @{u}` plus untracked files), report the scope to the user, and proactively remind them a full-repo scan is available; an explicitly specified target or an explicit full-repo request always overrides the default.
+2. **Establish intent & baseline** — two hats (never mix refactoring with new features); build a test safety net first (characterization tests for legacy code).
+3. **Diagnose bad smells** — match the code against `smells.md`, attack the smell that hurts comprehension the most, one at a time.
+4. **Consult the catalog** — load the matching `catalog-*.md` for mechanics; first-time use of a technique sends you to the original chapter for the full example.
+5. **Small-step loop** — apply one tiny change → compile → test → commit. Roll back to the last green state rather than debugging forward.
+6. **Wrap up** — update callers/docs, report which smells were fixed, which techniques were applied, and why behavior is unchanged.
 
 ## Installation
 
