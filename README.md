@@ -14,7 +14,7 @@ Refactor code with small, safe, test-backed steps. A skill distilled from *Refac
 ## Overview
 
 - **Bad-smell diagnosis**: 24 named smells (long function, duplicated code, feature envy…) mapped to first-choice refactorings, so the agent knows *what* to look for and *which* technique to reach for.
-- **Health score**: diagnosis condenses into a 5-point score (one decimal) across 6 refactoring dimensions — naming, functions, data, module boundaries, abstraction, duplication — each dimension backed by file-level evidence.
+- **Health score**: with a full-repo scan, diagnosis condenses into a 5-point score (one decimal) across 6 refactoring dimensions — naming, functions, data, module boundaries, abstraction, duplication — each dimension backed by file-level evidence; incremental mode diagnoses only, no score.
 - **61 cataloged refactorings**: every technique from the book's catalog — Extract Function, Encapsulate Variable, Replace Conditional with Polymorphism, Replace Subclass with Delegate… — as small-step mechanics the agent follows one change at a time.
 - **Human in the loop**: the agent never edits a line before presenting a plan (findings → suggested techniques → risk assessment) and getting your approval on scope and depth.
 - **Incremental by default**: scans only your uncommitted and unpushed changes, and reminds you a full-repo scan is available.
@@ -24,7 +24,7 @@ Refactor code with small, safe, test-backed steps. A skill distilled from *Refac
 ## Features
 
 - **Evidence-based catalog** — distilled by reading all 12 chapters; every entry keeps the book's five-part shape (name → sketch → motivation → mechanics) with page-number citations for human traceability.
-- **Evidence-based health scoring** — 6 dimensions covering all 24 smells; scoped to what was actually scanned, with unrated dimensions called out and a weakest-link warning when any dimension drops to 2 or below; the score never bypasses the decision gate; re-scored at wrap-up for a before/after comparison.
+- **Evidence-based health scoring** — only alongside a full-repo scan (incremental mode never scores); 6 dimensions covering all 24 smells; unrated dimensions called out and a weakest-link warning when any dimension drops to 2 or below; the score never bypasses the decision gate; re-scored at wrap-up for a before/after comparison.
 - **Self-contained install** — the `skill/` directory is everything an agent needs; no paths into this repo, no external dependencies.
 - **Universal SKILL.md format** — works with ZCode, Claude Code, and Codex (and any agent that discovers skills from a `SKILL.md`).
 - **Safety-net first** — characterization tests for legacy code before touching it; green-bar discipline throughout (test failed → roll back, don't debug forward).
@@ -75,11 +75,11 @@ The agent will scan your incremental changes, report the bad smells it found, an
 ```text
 1. Scope        git diff @{u} + untracked files → report scope → remind about full-repo scan
 2. Baseline     intent (two hats) + test safety net (characterization tests if none)
-3. Diagnose     match code against 24 bad smells, condense into a 5-point health score — read-only
+3. Diagnose     match code against 24 bad smells; full-repo scans also condense into a 5-point health score — read-only
 4. DECIDE       scorecard + plan (findings / techniques / risks) → wait for user approval
 5. Execute      approved items only, following catalog small-step mechanics
 6. Loop         tiny change → compile → test → commit; roll back on red
-7. Wrap up      report per approved item, incl. declined ones and new findings; re-score (before → after)
+7. Wrap up      report per approved item, incl. declined ones and new findings; full-repo scans re-score (before → after)
 ```
 
 ## Project structure
